@@ -111,33 +111,50 @@ if (statsSection) {
 }
 
 // ===== CONTACT FORM =====
-contactForm.addEventListener('submit', function(e) {
+contactForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const submitBtn = document.getElementById('submitBtn');
     const originalContent = submitBtn.innerHTML;
+    const form = e.target;
+    const formData = new FormData(form);
     
     // Show loading state
     submitBtn.innerHTML = '<span>Gönderiliyor...</span><div class="spinner"></div>';
     submitBtn.style.pointerEvents = 'none';
     submitBtn.style.opacity = '0.8';
     
-    // Simulate form submission
-    setTimeout(() => {
-        // Show success
-        const form = document.getElementById('contactForm');
-        form.innerHTML = `
-            <div class="form-success show">
-                <div class="success-icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
+    try {
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            // Show success
+            form.innerHTML = `
+                <div class="form-success show">
+                    <div class="success-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <h3>Mesajınız Alındı!</h3>
+                    <p>Mesajınız başarıyla iletildi. En kısa sürede size dönüş yapacağız. Teşekkürler!</p>
                 </div>
-                <h3>Mesajınız Alındı!</h3>
-                <p>En kısa sürede size dönüş yapacağız. Teşekkürler!</p>
-            </div>
-        `;
-    }, 1500);
+            `;
+        } else {
+            throw new Error('Form gönderimi başarısız oldu.');
+        }
+    } catch (error) {
+        submitBtn.innerHTML = originalContent;
+        submitBtn.style.pointerEvents = 'all';
+        submitBtn.style.opacity = '1';
+        alert('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
+    }
 });
 
 // ===== ACTIVE NAV LINK ON SCROLL =====

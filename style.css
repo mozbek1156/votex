@@ -183,11 +183,7 @@ img {
     font-weight: 700;
 }
 
-.logo-toys {
-    color: var(--gray-800);
-}
-
-.logo-ebig {
+.logo-text {
     background: var(--gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1284,8 +1280,9 @@ img {
     line-height: 1.7;
 }
 
-.footer-brand .logo-toys {
+.footer-brand .logo-text {
     color: var(--white);
+    font-size: 1.8rem;
 }
 
 .footer-links h4 {
